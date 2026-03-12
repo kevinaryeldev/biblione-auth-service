@@ -6,7 +6,7 @@ target/
 *.class
 *.jar
 *.war
-application-local.yml
+application-dev.yml
 .env
 
 ### STS ###
