@@ -61,6 +61,8 @@ biblione:
     refresh-expiration-ms: ${jwt_refresh_expiration_ms}
   auth:
     allowed-email-domain: ${allowed_email_domain}
+    oauth2:
+      redirect-uri: ${oauth2_redirect_uri}
 
 server:
   port: 8081
