@@ -4,8 +4,10 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+import lombok.ToString;
 
 @Data
+@ToString(exclude = "password")
 public class RegisterRequest {
 
     @NotBlank(message = "Nome é obrigatório")
