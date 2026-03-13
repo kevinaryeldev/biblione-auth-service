@@ -58,6 +58,7 @@ public class AuthService {
                 .build();
 
         userRepository.save(user);
+        userRepository.flush();
         log.info("New user registered: {}", user.getEmail());
 
         return buildAuthResponse(user, httpRequest);
