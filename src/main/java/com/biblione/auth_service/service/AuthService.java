@@ -25,6 +25,8 @@ import java.net.UnknownHostException;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
+import static com.biblione.auth_service.util.TokenHashUtils.hash;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -83,7 +85,7 @@ public class AuthService {
 
     @Transactional
     public AuthResponse refresh(RefreshTokenRequest request, HttpServletRequest httpRequest) {
-        String tokenHash = hashToken(request.getRefreshToken());
+        String tokenHash = hash(request.getRefreshToken());
 
         RefreshToken refreshToken = refreshTokenRepository.findByTokenHash(tokenHash)
                 .orElseThrow(InvalidTokenException::new);
@@ -118,7 +120,7 @@ public class AuthService {
 
         RefreshToken refreshToken = RefreshToken.builder()
                 .user(user)
-                .tokenHash(hashToken(rawRefreshToken))
+                .tokenHash(hash(rawRefreshToken))
                 .expiresAt(OffsetDateTime.now().plusNanos(refreshExpirationMs * 1_000_000))
                 .ipAddress(resolveIpAddress(httpRequest))
                 .userAgent(httpRequest.getHeader("User-Agent"))
@@ -140,15 +142,6 @@ public class AuthService {
         }
     }
 
-    private String hashToken(String token) {
-        try {
-            java.security.MessageDigest digest = java.security.MessageDigest.getInstance("SHA-256");
-            byte[] hash = digest.digest(token.getBytes(java.nio.charset.StandardCharsets.UTF_8));
-            return java.util.Base64.getEncoder().encodeToString(hash);
-        } catch (java.security.NoSuchAlgorithmException e) {
-            throw new RuntimeException("Error hashing token", e);
-        }
-    }
 
     private InetAddress resolveIpAddress(HttpServletRequest request) {
         String ip = request.getHeader("X-Forwarded-For");
