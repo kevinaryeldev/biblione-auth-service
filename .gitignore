@@ -8,6 +8,7 @@ target/
 *.war
 application-dev.yml
 .env
+.claude/
 
 ### STS ###
 .apt_generated
